@@ -1,0 +1,206 @@
+---
+title: "William Ball's CV"
+author: William Ball
+date: "`r Sys.Date()`"
+params:
+  pdf_mode:
+    value: true
+output:
+  pagedown::html_resume:
+    css: ['dd_cv.css', 'resume']
+    self_contained: true
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  results='asis', 
+  echo = FALSE
+)
+
+library(magrittr) # For the pipe
+source("cv_printing_functions.r")
+
+# Read in all data and initialize a CV printer object
+CV <- create_CV_object(
+  data_location = "https://docs.google.com/spreadsheets/d/1bPybtMYFqQnBpJ1R332Mx_2AXP0S2-nPeozlFtufvoo/edit?usp=sharing",  
+  pdf_mode = params$pdf_mode
+)
+
+```
+
+
+```{r}
+# When in pdf export mode the little dots are unaligned, so fix that with some conditional CSS.
+if(params$pdf_mode) {
+    cat("
+<style>
+:root{
+  --decorator-outer-offset-left: -6.5px;
+}
+</style>")
+}
+```
+
+
+Aside
+================================================================================
+
+```{r}
+# Build interactive network of positions colored by section
+# and connected if they occurred in the same year
+datadrivencv::build_network_logo(CV$entries_data)
+```
+
+
+```{r}
+if(params$pdf_mode){
+  cat("View this CV online with links at _wpball.com/files/cv.html_")
+} else {
+  cat("[<i class='fas fa-download'></i> Download a PDF of this CV](https://github.com/will-ball/CV/raw/master/pdf/ball_cv.pdf)")
+} 
+```
+
+Contact {#contact}
+--------------------------------------------------------------------------------
+
+```{r}
+CV %>% print_contact_info()
+```
+
+
+
+Disclaimer {#disclaimer}
+--------------------------------------------------------------------------------
+
+Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
+
+The source code is available [on github.com/will-ball/CV](https://github.com/will-ball/CV).
+
+Last updated on `r Sys.Date()`.
+
+
+
+Main
+================================================================================
+
+William Ball {#title}
+--------------------------------------------------------------------------------
+
+```{r}
+# Note the special double pipe so we modify the CV object in place
+CV %<>% print_text_block("intro") 
+```
+
+
+
+Education {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r}
+CV %<>% print_section('education')
+```
+
+
+Research Interests {data-icon=vial}
+--------------------------------------------------------------------------------
+
+```{r}
+CV %<>% print_text_block('research_interests1')
+```
+
+```{r}
+CV %<>% print_text_block('research_interests2')
+```
+
+```{r}
+CV %<>% print_text_block('research_interests3')
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+Selected Publications, Posters & Talks {data-icon=chalkboard-teacher}
+--------------------------------------------------------------------------------
+
+::: aside
+```{r}
+CV %<>% print_text_block('other_writing_aside')
+```
+:::
+
+```{r}
+CV %<>% print_section('academic_articles')
+```
+
+
+Skills & Expertise {data-icon=clipboard-list}
+--------------------------------------------------------------------------------
+
+::: aside
+```{r}
+#CV %<>% print_text_block('')
+```
+:::
+
+```{r}
+CV %<>% print_text_block('skills1')
+```
+
+```{r}
+CV %<>% print_text_block('skills2')
+```
+
+```{r}
+CV %<>% print_text_block('skills3')
+```
+
+```{r}
+CV %<>% print_text_block('skills4')
+```
+
+```{r}
+CV %<>% print_text_block('skills5')
+```
+
+
+Training {data-icon=book}
+--------------------------------------------------------------------------------
+
+::: aside
+```{r}
+#CV %<>% print_text_block('data_science_writing_aside')
+```
+:::
+
+```{r}
+CV %<>% print_section('training')
+```
+
+
+
+Clinical Experience  {data-icon=user-md}
+--------------------------------------------------------------------------------
+
+```{r}
+CV %<>% print_section('clinical_positions')
+```
+
+
+
+Professional Memberships  {data-icon=address-card}
+--------------------------------------------------------------------------------
+
+```{r}
+CV %<>% print_section('professional')
+```
+
+
+
+```{r}
+CV %<>% print_links()
+```
+
